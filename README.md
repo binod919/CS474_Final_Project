@@ -5,4 +5,7 @@
   * Subarna Joshi
   
 #### Possible project lists:
- * 
+* proj4j (https://github.com/jeo/proj4j)
+* voice-client-example (https://github.com/iwojima/voice-client-example)
+* MapReducePageRank (https://github.com/fabiuz7/MapReducePageRank)
+
