@@ -1,6 +1,6 @@
 # CS474_Final_Project
 
-Team Members: 
+####Team Members: 
   * Binod Karki
   * Subarna Joshi
   
