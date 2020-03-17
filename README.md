@@ -5,6 +5,9 @@
   * Subarna Joshi
   * Kyle Tupper
   
+ #### Project Choosed
+  * https://github.com/checkstyle/checkstyle
+  
 #### Possible project lists:
 * proj4j (https://github.com/jeo/proj4j)
 * voice-client-example (https://github.com/iwojima/voice-client-example)
