@@ -6,7 +6,7 @@
   * Kyle Tupper
   
  #### Project Choosed
-  * https://github.com/checkstyle/checkstyle
+  * Checkstyle: https://github.com/checkstyle/checkstyle
   
 #### Possible project lists:
 * proj4j (https://github.com/jeo/proj4j)
