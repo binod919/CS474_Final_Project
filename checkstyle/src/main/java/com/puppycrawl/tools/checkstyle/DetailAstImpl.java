@@ -187,6 +187,7 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
      requires ast != null;
      ensures this.getChildCount() > \old(this.getChildCount());
      @*/
+    @Override
     public void addChild(AST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(this);

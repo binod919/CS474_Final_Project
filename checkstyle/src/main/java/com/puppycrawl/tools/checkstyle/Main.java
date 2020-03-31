@@ -164,7 +164,7 @@ public final class Main {
      **/
 
      /*@ensures \result != null;
-       @ensure \result.length > 0;
+       @ensures \result.length() > 0;
        @*/
     private static String getVersionString() {
         return "Checkstyle version: " + Main.class.getPackage().getImplementationVersion();
@@ -270,11 +270,10 @@ public final class Main {
      * @return True if the directory/file matches one of the patterns.
      */
     /*@requires path != null;
-      @requires path.length > 0;
+      @requires path.length() > 0;
       @requires patternsToExclude != null;
       @requires patternsToExclude.size() > 0;
-      @ensures result != null;
-      @insures \result == true || \result == false;
+      @ensures \result == true || \result == false;
       @*/
     private static boolean isPathExcluded(String path, List<Pattern> patternsToExclude) {
         boolean result = false;
