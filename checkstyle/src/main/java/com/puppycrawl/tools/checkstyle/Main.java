@@ -300,6 +300,7 @@ public final class Main {
     /*@requires options != null;
       @requires filesToProcess != null;
       @requires filesToProcess.isEmpty() == false;
+      @ensures \result >= 0;
       @*/
     private static int runCli(CliOptions options, List<File> filesToProcess)
             throws IOException, CheckstyleException {
@@ -375,6 +376,7 @@ public final class Main {
       /*@requires options != null;
       @requires filesToProcess != null;
       @requires filesToProcess.isEmpty() == false;
+      @requires \result >= 0;
       @*/
     private static int runCheckstyle(CliOptions options, List<File> filesToProcess)
             throws CheckstyleException, IOException {
