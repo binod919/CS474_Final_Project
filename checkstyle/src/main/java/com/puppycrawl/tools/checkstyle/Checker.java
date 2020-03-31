@@ -274,6 +274,10 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
      * @noinspection ProhibitedExceptionThrown
      */
     // -@cs[CyclomaticComplexity] no easy way to split this logic of processing the file
+
+    /*@requires files != null;
+      @requires files.size() > 0
+      @*/
     private void processFiles(List<File> files) throws CheckstyleException {
         for (final File file : files) {
             String fileName = null;
@@ -321,6 +325,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
      * @throws CheckstyleException if error condition within Checkstyle occurs.
      * @noinspection ProhibitedExceptionThrown
      */
+    /*@requires file != null;@*/
     private SortedSet<LocalizedMessage> processFile(File file) throws CheckstyleException {
         final SortedSet<LocalizedMessage> fileMessages = new TreeSet<>();
         try {
@@ -363,6 +368,9 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
      *            the file to be audited
      * @return {@code true} if the file is accepted.
      */
+    /*@ requires fileName != null;
+      @ requires fileName.length() > 0;
+      @*/
     private boolean acceptFileStarted(String fileName) {
         final String stripped = CommonUtil.relativizeAndNormalizePath(basedir, fileName);
         return beforeExecutionFileFilters.accept(stripped);
