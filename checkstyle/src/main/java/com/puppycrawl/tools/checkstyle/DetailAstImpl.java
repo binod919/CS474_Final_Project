@@ -40,16 +40,16 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
     private static final int NOT_INITIALIZED = Integer.MIN_VALUE;
 
     /** The line number. **/
-    private int lineNo = NOT_INITIALIZED;
+    private /*@ spec_public @*/ int lineNo = NOT_INITIALIZED;
     /** The column number. **/
-    private int columnNo = NOT_INITIALIZED;
+    private /*@ spec_public @*/ int columnNo = NOT_INITIALIZED;
 
     /** Number of children. */
     private int childCount = NOT_INITIALIZED;
     /** The parent token. */
-    private DetailAstImpl parent;
+    private /*@ spec_public @*/ DetailAstImpl parent;
     /** Previous sibling. */
-    private DetailAstImpl previousSibling;
+    private /*@ spec_public @*/ DetailAstImpl previousSibling;
 
     /**
      * All token types in this branch.
@@ -67,7 +67,14 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         columnNo = tok.getColumn() - 1;
     }
 
-    @Override
+    
+    /*@
+    requires ast != null;
+    ensures this.getText() == ((DetailAstImpl) ast).getText();
+    ensures this.getType() == ((DetailAstImpl) ast).getType();
+    ensures this.getLineNo() == ((DetailAstImpl) ast).getLineNo();
+    ensures this.getColumnNo() == ((DetailAstImpl) ast).getColumnNo();    
+    @*/
     public void initialize(AST ast) {
         final DetailAstImpl detailAst = (DetailAstImpl) ast;
         setText(detailAst.getText());
@@ -78,7 +85,12 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         hiddenBefore = detailAst.getHiddenBefore();
     }
 
-    @Override
+    
+    /*@
+        requires ast != null;
+        ensures this.getFirstChild() == ast;
+        ensures ((DetailAstImpl) ast).getParent() == this;
+     @*/
     public void setFirstChild(AST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(this);
@@ -88,16 +100,22 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         }
     }
 
-    @Override
+   
+    /*@
+    requires ast != null;
+    ensures super.getNextSibling() == ast;
+ @*/
     public void setNextSibling(AST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
         super.setNextSibling(ast);
         if (ast != null && parent != null) {
             ((DetailAstImpl) ast).setParent(parent);
+            //@ assert ((DetailAstImpl) ast).getParent() == parent;
         }
         if (ast != null) {
             ((DetailAstImpl) ast).previousSibling = this;
+            //@ assert ((DetailAstImpl) ast).getPreviousSibling() == this;
         }
     }
 
@@ -106,6 +124,12 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
      * @param ast
      *        DetailAST object.
      */
+    
+    /*@
+     requires ast != null;
+     ensures previousSibling == ast;
+    @*/
+    
     public void addPreviousSibling(DetailAST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
@@ -117,9 +141,11 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
             if (previousSiblingNode != null) {
                 astImpl.previousSibling = previousSiblingNode;
                 previousSiblingNode.setNextSibling(astImpl);
+                //@ assert previousSiblingNode.getNextSibling() == astImpl;
             }
             else if (parent != null) {
                 parent.setFirstChild(astImpl);
+                //@ assert parent.getFirstChild() == astImpl;
             }
 
             astImpl.setNextSibling(this);
@@ -132,6 +158,10 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
      * @param ast
      *        DetailAST object.
      */
+    /*@
+    requires ast != null;
+    @*/
+    
     public void addNextSibling(DetailAST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
@@ -143,20 +173,27 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
             if (nextSibling != null) {
                 astImpl.setNextSibling(nextSibling);
                 nextSibling.previousSibling = astImpl;
+                //@ assert nextSibling.getPreviousSibling() == astImpl;
+                
             }
 
             astImpl.previousSibling = this;
             setNextSibling(astImpl);
+            //@ assert astImpl.getPreviousSibling() == this;
         }
     }
 
-    @Override
+    /*@
+     requires ast != null;
+     ensures this.getChildCount() > \old(this.getChildCount());
+     @*/
     public void addChild(AST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(this);
         if (ast != null) {
             final DetailAstImpl astImpl = (DetailAstImpl) ast;
             astImpl.setParent(this);
+            //@ assert astImpl.getParent() == this;
             astImpl.previousSibling = (DetailAstImpl) getLastChild();
         }
         super.addChild(ast);
@@ -192,6 +229,11 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
      * Set the parent token.
      * @param parent the parent token
      */
+    
+    /*@
+     requires parent != null;
+     ensures this.getParent() == parent; 
+     @*/
     private void setParent(DetailAstImpl parent) {
         DetailAstImpl instance = this;
         do {
@@ -202,6 +244,7 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
     }
 
     @Override
+    /*@ pure @*/
     public DetailAST getParent() {
         return parent;
     }
@@ -343,6 +386,7 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
     }
 
     @Override
+    /*@ pure @*/
     public DetailAST getPreviousSibling() {
         return previousSibling;
     }
