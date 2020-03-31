@@ -101,8 +101,14 @@ public final class Main {
      * @param args the command line arguments.
      * @throws IOException if there is a problem with files access
      * @noinspection UseOfSystemOutOrSystemErr, CallToPrintStackTrace, CallToSystemExit
-     **/
+     */
+
+    /*@requires args.length > 0;
+      @requires args != null;
+      @*/
     public static void main(String... args) throws IOException {
+
+        assert (args != null && args.length != 0) : "Arguments to the program not found.";
 
         final CliOptions cliOptions = new CliOptions();
         final CommandLine commandLine = new CommandLine(cliOptions);
@@ -155,7 +161,11 @@ public final class Main {
     /**
      * Returns the version string printed when the user requests version help (--version or -V).
      * @return a version string based on the package implementation version
-     */
+     **/
+
+     /*@ensures \result != null;
+       @ensure \result.length > 0;
+       @*/
     private static String getVersionString() {
         return "Checkstyle version: " + Main.class.getPackage().getImplementationVersion();
     }
@@ -170,6 +180,10 @@ public final class Main {
      * @throws CheckstyleException if something happens processing the files.
      * @noinspection UseOfSystemOutOrSystemErr
      */
+
+    /*@requires parseResult != null;
+      @requires options != null;
+     @*/
     private static int execute(ParseResult parseResult, CliOptions options)
             throws IOException, CheckstyleException {
 
@@ -182,9 +196,11 @@ public final class Main {
         if (hasMessages) {
             messages.forEach(System.out::println);
             exitStatus = EXIT_WITH_INVALID_USER_INPUT_CODE;
+            assert (exitStatus < 0): "Must have negative exit status when execution fails";
         }
         else {
             exitStatus = runCli(options, filesToProcess);
+            assert(exitStatus > 0): "Did not return good exit status";
         }
         return exitStatus;
     }
@@ -194,6 +210,9 @@ public final class Main {
      * @param options the user-specified options
      * @return list of files to process
      */
+    /*@requires options != null;
+      @ensures \result != null;
+     @*/
     private static List<File> getFilesToProcess(CliOptions options) {
         final List<Pattern> patternsToExclude = options.getExclusions();
 
@@ -213,9 +232,15 @@ public final class Main {
      *        files.
      * @return found files
      */
+    /*@requires node != null;
+      @requires patternsToExclude != null;
+      @requires patternsToExclude.size() > 0;
+      @ensures \result != null;
+      @*/
     private static List<File> listFiles(File node, List<Pattern> patternsToExclude) {
         // could be replaced with org.apache.commons.io.FileUtils.list() method
         // if only we add commons-io library
+
         final List<File> result = new LinkedList<>();
 
         if (node.canRead() && !isPathExcluded(node.getAbsolutePath(), patternsToExclude)) {
@@ -232,6 +257,7 @@ public final class Main {
                 result.add(node);
             }
         }
+        assert(result.size() > 0): "File list size requirement not met. size <= 0";
         return result;
     }
 
@@ -243,6 +269,13 @@ public final class Main {
      *        files.
      * @return True if the directory/file matches one of the patterns.
      */
+    /*@requires path != null;
+      @requires path.length > 0;
+      @requires patternsToExclude != null;
+      @requires patternsToExclude.size() > 0;
+      @ensures result != null;
+      @insures \result == true || \result == false;
+      @*/
     private static boolean isPathExcluded(String path, List<Pattern> patternsToExclude) {
         boolean result = false;
 
@@ -265,11 +298,14 @@ public final class Main {
      * @throws CheckstyleException if something happens processing the files.
      * @noinspection UseOfSystemOutOrSystemErr
      */
+    /*@requires options != null;
+      @requires filesToProcess != null;
+      @requires filesToProcess.isEmpty() == false;
+      @*/
     private static int runCli(CliOptions options, List<File> filesToProcess)
             throws IOException, CheckstyleException {
         int result = 0;
         final boolean hasSuppressionLineColumnNumber = options.suppressionLineColumnNumber != null;
-
         // create config helper object
         if (options.printAst) {
             // print AST
@@ -337,6 +373,10 @@ public final class Main {
      * @throws CheckstyleException
      *         when properties file could not be loaded
      */
+      /*@requires options != null;
+      @requires filesToProcess != null;
+      @requires filesToProcess.isEmpty() == false;
+      @*/
     private static int runCheckstyle(CliOptions options, List<File> filesToProcess)
             throws CheckstyleException, IOException {
         // setup the properties
@@ -417,7 +457,6 @@ public final class Main {
     private static Properties loadProperties(File file)
             throws CheckstyleException {
         final Properties properties = new Properties();
-
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             properties.load(stream);
         }
@@ -693,7 +732,7 @@ public final class Main {
          * @noinspection CanBeFinal
          */
         @Option(names = {"-x", "--exclude-regexp"},
-                description = "Regular expression of directory/file to exclude from CheckStyle")
+                description = "Regular ex--------------pression of directory/file to exclude from CheckStyle")
         private List<Pattern> excludeRegex = new ArrayList<>();
 
         /** Switch whether to execute ignored modules or not. */
@@ -730,6 +769,8 @@ public final class Main {
          * Gets the list of exclusions provided through the command line arguments.
          * @return List of exclusion patterns.
          */
+
+        /*@ensures \result != null; @*/
         private List<Pattern> getExclusions() {
             final List<Pattern> result = exclude.stream()
                     .map(File::getAbsolutePath)
@@ -746,11 +787,19 @@ public final class Main {
          * @param filesToProcess the list of files whose style to check
          * @return list of violations
          */
+
+        /*@requires parseResult != null;
+          @requires filesToProcess != null;
+          @requires filesToProcess.size() > 0;
+          @ensures \result != null;
+          @*/
+
         // -@cs[CyclomaticComplexity] Breaking apart will damage encapsulation
         private List<String> validateCli(ParseResult parseResult, List<File> filesToProcess) {
             final List<String> result = new ArrayList<>();
             final boolean hasConfigurationFile = configurationFile != null;
             final boolean hasSuppressionLineColumnNumber = suppressionLineColumnNumber != null;
+
 
             if (filesToProcess.isEmpty()) {
                 result.add("Files to process must be specified, found 0.");
