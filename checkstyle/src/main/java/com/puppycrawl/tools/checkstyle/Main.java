@@ -107,7 +107,6 @@ public final class Main {
       @requires args != null;
       @*/
     public static void main(String... args) throws IOException {
-
         assert (args != null && args.length != 0) : "Arguments to the program not found.";
 
         final CliOptions cliOptions = new CliOptions();
@@ -183,7 +182,7 @@ public final class Main {
 
     /*@requires parseResult != null;
       @requires options != null;
-     @*/
+      @*/
     private static int execute(ParseResult parseResult, CliOptions options)
             throws IOException, CheckstyleException {
 
