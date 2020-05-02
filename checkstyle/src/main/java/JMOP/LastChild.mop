@@ -1,0 +1,18 @@
+package JMOP;
+
+import java.io.*;
+import java.util.*;
+
+LastChild(DetailAstImpl dai){
+ event hasChildren after(DetailAstImpl dai) : call(public boolean *.hasChildren()) && target(dai){}
+ event getLastChild before(DetailAstImpl dai) : call(public DetailAstImpl *.getLastChild()) && target(dai){}
+ 
+ ere : (hasChildren hasChildren* getLastChild)*
+ 
+ @fail{
+    System.err.println("hasChildren() not called before getLastChild()");
+    __RESET;
+ }
+
+}
+

@@ -119,11 +119,7 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         }
     }
 
-    /**
-     * Add previous sibling.
-     * @param ast
-     *        DetailAST object.
-     */
+
     
     /*@
      requires ast != null;
@@ -153,13 +149,9 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         }
     }
 
-    /**
-     * Add next sibling.
-     * @param ast
-     *        DetailAST object.
-     */
+   
     /*@
-    requires ast != null;
+       requires ast != null;
     @*/
     
     public void addNextSibling(DetailAST ast) {
@@ -226,10 +218,6 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         return count;
     }
 
-    /**
-     * Set the parent token.
-     * @param parent the parent token
-     */
     
     /*@
      requires parent != null;
@@ -410,11 +398,13 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
     }
 
     @Override
+    /*@ pure @*/
     public DetailAstImpl getNextSibling() {
         return (DetailAstImpl) super.getNextSibling();
     }
 
     @Override
+    /*@ pure @*/
     public DetailAstImpl getFirstChild() {
         return (DetailAstImpl) super.getFirstChild();
     }
