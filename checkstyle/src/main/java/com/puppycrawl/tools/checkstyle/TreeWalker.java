@@ -94,9 +94,12 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
 
     @Override
     public void finishLocalSetup() {
+    	
         final DefaultContext checkContext = new DefaultContext();
+        assert checkContext.equals(null);
         checkContext.add("severity", getSeverity());
         checkContext.add("tabWidth", String.valueOf(getTabWidth()));
+        assert checkContext.getAttributeNames() != null;
         childContext = checkContext;
     }
 
@@ -109,7 +112,8 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
             throws CheckstyleException {
         final String name = childConf.getName();
         final Object module;
-
+        assert name.equals(childConf.getName());
+        
         try {
             module = moduleFactory.createModule(name);
             if (module instanceof AutomaticBean) {
@@ -125,6 +129,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         if (module instanceof AbstractCheck) {
             final AbstractCheck check = (AbstractCheck) module;
             check.init();
+            assert check != null;
             registerCheck(check);
         }
         else if (module instanceof TreeWalkerFilter) {
@@ -144,7 +149,11 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         // check if already checked and passed the file
         if (!ordinaryChecks.isEmpty() || !commentChecks.isEmpty()) {
             final FileContents contents = getFileContents();
+            assert contents != null;
+            
             final DetailAST rootAST = JavaParser.parse(contents);
+            assert rootAST != null;
+            assert AstState.ORDINARY != null;
             if (!ordinaryChecks.isEmpty()) {
                 walk(rootAST, contents, AstState.ORDINARY);
             }
@@ -197,6 +206,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         final Set<String> checkTokens = check.getTokenNames();
         if (checkTokens.isEmpty()) {
             tokens = check.getDefaultTokens();
+            assert tokens != null;
         }
         else {
             tokens = check.getRequiredTokens();
@@ -204,6 +214,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
             // register configured tokens
             final int[] acceptableTokens = check.getAcceptableTokens();
             Arrays.sort(acceptableTokens);
+            assert Arrays.deepEquals(getFileExtensions(), getFileExtensions()); //should be false
             for (String token : checkTokens) {
                 final int tokenId = TokenUtil.getTokenId(token);
                 if (Arrays.binarySearch(acceptableTokens, tokenId) >= 0) {
