@@ -363,8 +363,8 @@ public class DetailAstImplTest extends AbstractModuleTestSupport {
         child.setNextSibling(sibling);
         child.addNextSibling(newSibling);
 
-        assertEquals(parent, newSibling.getParent(), "Invalid parent");
-        assertEquals(sibling, newSibling.getNextSibling(), "Invalid next sibling");
+        assertEquals(parent, newSibling.getParent(), "parent not set");
+        assertEquals(sibling, newSibling.getNextSibling(), "new sibling did not set");
         assertEquals(newSibling, child.getNextSibling(), "Invalid child");
     }
 
