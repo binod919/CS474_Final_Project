@@ -7,7 +7,16 @@
   
  #### Project Chosen
   * Checkstyle: https://github.com/checkstyle/checkstyle
+
+#### Location to our Junit Tests: 
+###### /checkstyle/src/test/java/junitTests/
+ Inside this directory, we have 3 separate test suite:
+  * TestDetailAst.java
+  * TestMain.java
+  * TestTreeWalker.java
   
+#### Loation to our JMOP file
+ * /checkstyle/src/main/java/JMOP/LastChild.mop
 #### Possible project lists:
 * proj4j (https://github.com/jeo/proj4j)
 * voice-client-example (https://github.com/iwojima/voice-client-example)
