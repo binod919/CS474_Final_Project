@@ -5,7 +5,7 @@
   * Subarna Joshi
   * Kyle Tupper
   
- #### Project Choosed
+ #### Project Chosen
   * Checkstyle: https://github.com/checkstyle/checkstyle
   
 #### Possible project lists:
