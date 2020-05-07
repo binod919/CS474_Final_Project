@@ -1,16 +1,10 @@
 package junitTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.Test;
-
 import com.puppycrawl.tools.checkstyle.DetailAstImpl;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-
-import antlr.Token;
-import antlr.collections.AST;
 
 class TestDetailAst {
 	
@@ -60,7 +54,7 @@ class TestDetailAst {
     
     @Test
      void testSetSibling() throws Exception {
-        final DetailAstImpl parent = new DetailAstImpl();
+         DetailAstImpl parent = new DetailAstImpl();
         final DetailAstImpl child1 = new DetailAstImpl();
         final DetailAstImpl child2 = new DetailAstImpl();
         

@@ -85,7 +85,6 @@ public final class DetailAstImpl extends CommonASTWithHiddenTokens implements De
         hiddenBefore = detailAst.getHiddenBefore();
     }
 
-    
     /*@
         requires ast != null;
         ensures this.getFirstChild() == ast;

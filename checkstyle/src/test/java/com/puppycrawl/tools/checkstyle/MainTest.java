@@ -208,7 +208,8 @@ public class MainTest {
     public void testVersionPrint(@SysErr Capturable systemErr, @SysOut Capturable systemOut)
             throws IOException {
         Main.main("-V");
-        assertEquals("Checkstyle version: null" + System.lineSeparator(),
+        assertEquals("Checkstyle ve" +
+                        "rsion: null" + System.lineSeparator(),
                 systemOut.getCapturedData(), "Unexpected output log");
         assertEquals("", systemErr.getCapturedData(), "Unexpected system error log");
     }
